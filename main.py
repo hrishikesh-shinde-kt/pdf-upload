@@ -43,7 +43,7 @@ if uploaded_pdf is not None:
     "insurance_company" : "star health",
     "data_type" : "Generic"
   }
-  headers = {"Authorization":"Api-Key T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc"}
+  headers = {"Authorization": st.secrets["auth_key"]}
 
   #Post API call.
   response = requests.post(url, files=files, data=data, headers=headers)
