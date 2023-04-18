@@ -17,8 +17,8 @@ def add_logo():
   # Add a logo to the left column
   with header:
     col1, col2 = st.columns(2)
-    with col1:
-      st.image('http://placekitten.com/200/200')
+    # with col1:
+      # st.image('http://placekitten.com/200/200')
 
     with col2:
       st.title('PDF-Uploader')
@@ -33,6 +33,23 @@ def change_name_format(name):
 # Returns list of keys of a dictonary.
 def get_column_name(keys):
   return [change_name_format(key) for key in keys.keys()]
+
+# Changes table border style.
+def set_table_border():
+  css = """
+      <style>
+      table.dataframe {
+          border-collapse: separate;
+          border-spacing: 0px;
+          border-color: #4d6bff;
+          border-width: 4px;
+          border-style: outset;
+          border-radius: 8px;
+      }
+      </style>
+  """
+
+  st.markdown(css, unsafe_allow_html=True)
 
 # Displays table(s) according to the response.
 def show_table(response):
@@ -49,6 +66,7 @@ def show_table(response):
         columns = get_column_name(response_item[item][0])
       )
     st.title(change_name_format(item))
+    set_table_border()
     hide_table_row_index = """
             <style>
               thead tr th:first-child {display:none}
@@ -59,8 +77,8 @@ def show_table(response):
     st.table(df)
 
 # Main logic.
-add_logo()
 
+add_logo()
 #Getting Policy type input.
 option = st.selectbox(
   'Select Policy type',
