@@ -2,6 +2,41 @@ import streamlit as st
 import pandas as pd
 import requests
 
+insurer_name_mapping = {
+  "Star Health & Allied Insurance Co. Ltd." : "Star Health",
+  "National Insurance Co. Ltd." : "",
+  "The New india Assurance Co Ltd." : "",
+  "The Orient al Insurance Co. Ltd." : "",
+  "United india Insurance Co. Ltd." : "",
+  "lAcko General Insurance Ltd." : "",
+  "Bajaj Alianz General Insurance Co. Ltd." : "",
+  "Bhasti AXA General insurance Co. Ltd." : "",
+  "Cholamandalam MS General Insurance Co. Ltd." : "",
+  "Edetweiss General Insurance Co. Ltd." : "",
+  "Future Generali India insurance Co. Ltd." : "",
+  "IGo Digit General Insurance Ltd." : "",
+  "HDFC ERGO General Insurance Co. Ltd." : "",
+  "ICICI Lombard General Insurance Co. Ltd." : "",
+  "IFFCO Tokio General insurance Co. Ltd." : "",
+  "Kotak Mahindra General Insurance Co. Ltd." : "",
+  "Liberty General insurance Ltd." : "",
+  "Magma HDI General insurance Co. Ltd." : "",
+  "Navi General Insurance Limited" : "",
+  "Raheja QBE General insurance Co. Ltd." : "",
+  "Reliance General Insurance Co. Ltd." : "",
+  "Royal Sundaram General Insurance Co. Ltd." : "",
+  "SBI General Insurance Co. Ltd." : "",
+  "Shriram General Insurance Co. Ltd." : "",
+  "Tata ANG General Insurance Co. Ltd." : "",
+  "Universal Sompo General Insurance Co. Ltd." : "",
+  "Aditya Birla Health insurance Co. Ltd." : "",
+  "Care Health Insurance Ltd." : "",
+  "HDFC ERGO Health Insurance Co. Ltd." : "",
+  "ManipalCigna Health Insurance Co. Ltd." : "",
+  "Miva Bupa Health insurance Co. Ltd." : "",
+  "Reliance Health Insurance Ltd." : "",
+}
+
 st.set_page_config(
   page_title="PDF-Uploader",
   # page_icon=":computer:",
@@ -74,33 +109,42 @@ def show_table(response):
             </style>
             """
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
+    # st.table(df.style.set_properties(**{'border-color': '#c7ecee'}))
     st.table(df)
 
 # Main logic.
 
 add_logo()
-#Getting Policy type input.
+
+# Getting the list of options.
+options = list(insurer_name_mapping.keys())
+options.insert(0, None)
+
+# Getting Policy type input.
 option = st.selectbox(
-  'Select Policy type',
-  ('star health', 'HDFC', 'ICICI')
+  'Insurer Name',
+  options
 )
 if option:
-  #Getting pdf input.
+  # Getting pdf input.
   uploaded_pdf = st.file_uploader("Upload your pdf")
+  company = insurer_name_mapping[option]
   if uploaded_pdf is not None:
     url = "https://pivot-port-poldoc-health.attributum.com/api/ml_process"
     files = {
       "input_file" : uploaded_pdf
     } 
     data = {
-      "insurance_company" : option.lower(),
+      "insurance_company" : company.lower(),
       "data_type" : "Generic"
     }
-    headers = {"Authorization": st.secrets["auth_key"]}
+    # headers = {"Authorization": st.secrets["auth_key"]}
+    headers = {"Authorization": "Api-Key T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc"}
 
-    #Post API call.
-    response = requests.post(url, files=files, data=data, headers=headers)
+    # Post API call.
+    if company != "":
+      response = requests.post(url, files=files, data=data, headers=headers)
 
-    if response:
-      show_table(response.json())
+      if response:
+        show_table(response.json())
 
