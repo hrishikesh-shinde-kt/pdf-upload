@@ -37,8 +37,72 @@ insurer_name_mapping = {
   "Reliance Health Insurance Ltd." : "",
 }
 
+colors = {
+  'header': '#cfe4f7',
+  'odd_row': '#e7f1fa',
+  'even_row': '#f2f9ff',
+}
+
+blue_shades = [
+    {'selector': '',
+     'props': [('border', '1px solid #c7d2ff')]},
+    {'selector': 'th',
+     'props': [('background-color', '#4c68ff'),
+               ('color', 'white'),
+               ('font-weight', 'bold')]},
+    {'selector': 'td',
+     'props': [('background-color', '#e5e9ff')]},
+    {'selector': 'tr:nth-of-type(odd)',
+     'props': [('background-color', '#d8dcff')]},
+    {'selector': 'tr:nth-of-type(even)',
+     'props': [('background-color', '#f2f4ff')]},
+    {'selector': 'tr:hover',
+     'props': [('background-color', '#c1c9ff')]},
+]
+blue_shades = [
+  {
+    'selector': 'table',
+    'props': [
+      ('width', '100%'),
+      ('border-collapse', 'collapse'),
+      ('border', f'1px solid {colors["header"]}')
+    ]
+  },
+  {
+    'selector': 'th',
+    'props': [
+      ('background-color', colors['header']),
+      ('color', '#000'),
+      ('font-weight', 'bold'),
+      ('text-align', 'center'),
+      ('border', f'1px solid {colors["header"]}')
+    ]
+  },
+  {
+    'selector': 'tr:nth-of-type(odd)',
+    'props': [
+      ('background-color', colors['odd_row']),
+      ('border', f'1px solid {colors["header"]}')
+    ]
+  },
+  {
+    'selector': 'tr:nth-of-type(even)',
+    'props': [
+      ('background-color', colors['even_row']),
+      ('border', f'1px solid {colors["header"]}')
+    ]
+  },
+  {
+    'selector': 'td',
+    'props': [
+      ('text-align', 'center'),
+      ('padding', '8px'),
+      ('border', f'1px solid {colors["header"]}')
+    ]
+  },
+]
 st.set_page_config(
-  page_title="PDF-Uploader",
+  page_title="Pivot Demo Portal",
   # page_icon=":computer:",
   layout="wide",  # sets page to wide mode as default. 
   # initial_sidebar_state="expanded"
@@ -56,7 +120,7 @@ def add_logo():
       # st.image('http://placekitten.com/200/200')
 
     with col2:
-      st.title('PDF-Uploader')
+      st.title('Pivot Demo Portal')
   
   # st.image("http://placekitten.com/200/200", width=30)
   # st.write("# PDF-Uploader")
@@ -109,8 +173,8 @@ def show_table(response):
             </style>
             """
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
-    # st.table(df.style.set_properties(**{'border-color': '#c7ecee'}))
-    st.table(df)
+    styled_df = df.style.set_table_styles(blue_shades)
+    st.table(styled_df)
 
 # Main logic.
 
