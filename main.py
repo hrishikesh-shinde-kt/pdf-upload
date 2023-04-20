@@ -15,7 +15,7 @@ insurer_name_mapping = {
   "Edetweiss General Insurance Co. Ltd." : "",
   "Future Generali India insurance Co. Ltd." : "",
   "IGo Digit General Insurance Ltd." : "",
-  "HDFC ERGO General Insurance Co. Ltd." : "",
+  "HDFC ERGO General Insurance Co. Ltd." : "HDFC",
   "ICICI Lombard General Insurance Co. Ltd." : "",
   "IFFCO Tokio General insurance Co. Ltd." : "",
   "Kotak Mahindra General Insurance Co. Ltd." : "",
