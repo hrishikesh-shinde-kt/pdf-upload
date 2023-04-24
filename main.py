@@ -102,7 +102,7 @@ blue_shades = [
   },
 ]
 st.set_page_config(
-  page_title="Pivot Demo Portal",
+  page_title="PIVOT Portability from Attributum",
   # page_icon=":computer:",
   layout="wide",  # sets page to wide mode as default. 
   # initial_sidebar_state="expanded"
@@ -115,12 +115,12 @@ def add_logo():
 
   # Add a logo to the left column
   with header:
-    col1, col2 = st.columns(2)
-    # with col1:
-      # st.image('http://placekitten.com/200/200')
+    col1, col2 = st.columns([2,3])
+    with col1:
+      st.image('media/Attributum.png')
 
     with col2:
-      st.title('Pivot Demo Portal')
+      st.title('PIVOT Portability from Attributum')
   
   # st.image("http://placekitten.com/200/200", width=30)
   # st.write("# PDF-Uploader")
@@ -164,7 +164,7 @@ def show_table(response):
         [list(i.values()) for i in response_item[item]],
         columns = get_column_name(response_item[item][0])
       )
-    st.title(change_name_format(item))
+    st.header(change_name_format(item))
     set_table_border()
     hide_table_row_index = """
             <style>
