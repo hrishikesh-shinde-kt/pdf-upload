@@ -5,35 +5,35 @@ import requests
 insurer_name_mapping = {
   "Star Health & Allied Insurance Co. Ltd." : "Star Health",
   "National Insurance Co. Ltd." : "",
-  "The New india Assurance Co Ltd." : "",
-  "The Orient al Insurance Co. Ltd." : "",
-  "United india Insurance Co. Ltd." : "",
-  "lAcko General Insurance Ltd." : "",
+  "The New India Assurance Co Ltd." : "",
+  "The Oriental Insurance Co. Ltd." : "",
+  "United India Insurance Co. Ltd." : "",
+  "Acko General Insurance Ltd." : "",
   "Bajaj Alianz General Insurance Co. Ltd." : "",
-  "Bhasti AXA General insurance Co. Ltd." : "",
+  "Bharti AXA General Insurance Co. Ltd." : "",
   "Cholamandalam MS General Insurance Co. Ltd." : "",
-  "Edetweiss General Insurance Co. Ltd." : "",
-  "Future Generali India insurance Co. Ltd." : "",
-  "IGo Digit General Insurance Ltd." : "",
+  "Edelweiss General Insurance Co. Ltd." : "",
+  "Future Generali India Insurance Co. Ltd." : "",
+  "Go Digit General Insurance Ltd." : "",
   "HDFC ERGO General Insurance Co. Ltd." : "HDFC",
   "ICICI Lombard General Insurance Co. Ltd." : "",
-  "IFFCO Tokio General insurance Co. Ltd." : "",
+  "IFFCO Tokio General Insurance Co. Ltd." : "",
   "Kotak Mahindra General Insurance Co. Ltd." : "",
-  "Liberty General insurance Ltd." : "",
-  "Magma HDI General insurance Co. Ltd." : "",
+  "Liberty General Insurance Ltd." : "",
+  "Magma HDI General Insurance Co. Ltd." : "",
   "Navi General Insurance Limited" : "",
-  "Raheja QBE General insurance Co. Ltd." : "",
+  "Raheja QBE General Insurance Co. Ltd." : "",
   "Reliance General Insurance Co. Ltd." : "",
   "Royal Sundaram General Insurance Co. Ltd." : "",
   "SBI General Insurance Co. Ltd." : "",
   "Shriram General Insurance Co. Ltd." : "",
-  "Tata ANG General Insurance Co. Ltd." : "",
+  "Tata AIG General Insurance Co. Ltd." : "",
   "Universal Sompo General Insurance Co. Ltd." : "",
-  "Aditya Birla Health insurance Co. Ltd." : "",
+  "Aditya Birla Health Insurance Co. Ltd." : "",
   "Care Health Insurance Ltd." : "",
   "HDFC ERGO Health Insurance Co. Ltd." : "",
-  "ManipalCigna Health Insurance Co. Ltd." : "",
-  "Miva Bupa Health insurance Co. Ltd." : "",
+  "Manipal Cigna Health Insurance Co. Ltd." : "",
+  "Niva Bupa Health Insurance Co. Ltd." : "",
   "Reliance Health Insurance Ltd." : "",
 }
 
@@ -191,7 +191,7 @@ option = st.selectbox(
 )
 if option:
   # Getting pdf input.
-  uploaded_pdf = st.file_uploader("Upload your pdf")
+  uploaded_pdf = st.file_uploader("Upload expiring policy pdf")
   company = insurer_name_mapping[option]
   if uploaded_pdf is not None:
     url = "https://pivot-port-poldoc-health.attributum.com/api/ml_process"
@@ -199,7 +199,7 @@ if option:
       "input_file" : uploaded_pdf
     } 
     data = {
-      "insurance_company" : company.lower(),
+      "Insurance_company" : company.lower(),
       "data_type" : "Generic"
     }
     # headers = {"Authorization": st.secrets["auth_key"]}
