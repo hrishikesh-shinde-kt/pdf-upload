@@ -199,7 +199,7 @@ if option:
       "input_file" : uploaded_pdf
     } 
     data = {
-      "Insurance_company" : company.lower(),
+      "insurance_company" : company.lower(),
       "data_type" : "Generic"
     }
     # headers = {"Authorization": st.secrets["auth_key"]}
