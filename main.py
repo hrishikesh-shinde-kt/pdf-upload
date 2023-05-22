@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 
 insurer_name_mapping = {
-  "Star Health & Allied Insurance Co. Ltd." : "Star Health",
+  "Star Health & Allied Insurance Co. Ltd." : "Star Insurance",
   "National Insurance Co. Ltd." : "",
   "The New India Assurance Co Ltd." : "",
   "The Oriental Insurance Co. Ltd." : "",
@@ -153,6 +153,7 @@ def set_table_border():
 # Displays table(s) according to the response.
 def show_table(response):
   response_item = response['response']['data']
+  response_item = {key: value for key, value in response_item.items() if value}
   for item in response_item:
     if isinstance(response_item[item], dict):
       df = pd.DataFrame(
