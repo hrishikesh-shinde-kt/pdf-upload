@@ -183,28 +183,28 @@ add_logo()
 # options = list(insurer_name_mapping.keys())
 # options.insert(0, None)
 
-
 # Getting the API-Key.
 api_key = st.text_input('API-Key')
+option = None
 
-# Getting the list of options.
-url = "https://pivot-port-poldoc-health.attributum.com/api/company/all"
-# headers = {"Authorization": st.secrets["auth_key"]} T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc
-if "Api-Key " not in api_key:
-  api_key = f"Api-Key {api_key}"
-headers = {"Authorization": api_key}
+if api_key:
+  # Getting the list of options.
+  url = "https://pivot-port-poldoc-health.attributum.com/api/company/all"
+  # headers = {"Authorization": st.secrets["auth_key"]} T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc
+  if "Api-Key " not in api_key:
+    api_key = f"Api-Key {api_key}"
+  headers = {"Authorization": api_key}
 
-response = requests.get(url, headers=headers)
-print(f"response > {response.json()}")
-options = [company['name'] for company in response.json()]
-options.insert(0, None)
-print(f"options > {options}")
+  response = requests.get(url, headers=headers)
+  options = [company['name'] for company in response.json()]
+  options.insert(0, None)
 
-# Getting Policy type input.
-option = st.selectbox(
-  'Insurer Name',
-  options
-)
+  # Getting Policy type input.
+  option = st.selectbox(
+    'Insurer Name',
+    options
+  )
+
 if option:
   # Getting pdf input.
   uploaded_pdf = st.file_uploader("Upload expiring policy pdf")
