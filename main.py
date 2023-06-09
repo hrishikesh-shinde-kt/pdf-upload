@@ -122,7 +122,7 @@ def add_logo():
     with col2:
       st.title('PIVOT Portability from Attributum')
   
-  # st.image("http://placekitten.com/200/200", width=30)
+  # st.image("http://placekitten.com/200/200", width=30) #Adds image in the code.
   # st.write("# PDF-Uploader")
 
 # Formats text.
@@ -178,12 +178,27 @@ def show_table(response):
     st.table(styled_df)
 
 # Main logic.
-
 add_logo()
 
+# options = list(insurer_name_mapping.keys())
+# options.insert(0, None)
+
+
+# Getting the API-Key.
+api_key = st.text_input('API-Key')
+
 # Getting the list of options.
-options = list(insurer_name_mapping.keys())
+url = "https://pivot-port-poldoc-health.attributum.com/api/company/all"
+# headers = {"Authorization": st.secrets["auth_key"]} T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc
+if "Api-Key " not in api_key:
+  api_key = f"Api-Key {api_key}"
+headers = {"Authorization": api_key}
+
+response = requests.get(url, headers=headers)
+print(f"response > {response.json()}")
+options = [company['name'] for company in response.json()]
 options.insert(0, None)
+print(f"options > {options}")
 
 # Getting Policy type input.
 option = st.selectbox(
@@ -193,21 +208,24 @@ option = st.selectbox(
 if option:
   # Getting pdf input.
   uploaded_pdf = st.file_uploader("Upload expiring policy pdf")
-  company = insurer_name_mapping[option]
+  # company = insurer_name_mapping[option]
   if uploaded_pdf is not None:
     url = "https://pivot-port-poldoc-health.attributum.com/api/ml_process"
     files = {
       "input_file" : uploaded_pdf
     } 
     data = {
-      "insurance_company" : company.lower(),
+      "insurance_company" : option,
       "data_type" : "Generic"
     }
-    # headers = {"Authorization": st.secrets["auth_key"]}
-    headers = {"Authorization": "Api-Key T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc"}
+    # headers = {"Authorization": st.secrets["auth_key"]} T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc
+    if "Api-Key " not in api_key:
+      api_key = f"Api-Key {api_key}"
+
+    headers = {"Authorization": api_key}
 
     # Post API call.
-    if company != "":
+    if option != "":
       response = requests.post(url, files=files, data=data, headers=headers)
 
       if response:
