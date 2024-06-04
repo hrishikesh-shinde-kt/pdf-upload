@@ -158,6 +158,9 @@ def load():
         "data_type" : "Generic"
       }
       response = requests.post(url, files=files, data=data, headers=headers)
-
-      if response:
+      if response and response.status_code == 200:
         show_table(response.json())
+      elif response.status_code == 403:
+        st.write("Wrong API key. Enter Correct API key.")
+      else:
+        st.write("Some Error occured in API.")

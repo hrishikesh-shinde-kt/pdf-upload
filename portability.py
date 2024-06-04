@@ -150,14 +150,19 @@ def load():
     headers = {"Authorization": port_api_key}
 
     response = requests.get(url, headers=headers)
-    options = [company['name'] for company in response.json()]
-    options.insert(0, None)
+    if response.status_code == 200:
+      options = [company['name'] for company in response.json()]
+      options.insert(0, None)
 
-    # Getting Policy type input.
-    option = st.selectbox(
-      'Insurer Name',
-      options
-    )
+      # Getting Policy type input.
+      option = st.selectbox(
+        'Insurer Name',
+        options
+      )
+    elif response.status_code == 403:
+      st.write("Wrong API key. Enter Correct API key.")
+    else:
+      st.write("Some Error occured in API.")
 
   if option:
     # Getting pdf input.
@@ -179,6 +184,10 @@ def load():
       # Post API call.
       if option != "":
         response = requests.post(url, files=files, data=data, headers=headers)
-        if response:
+        if response and response.status_code == 200:
           show_table(response.json())
+        elif response.status_code == 403:
+          st.write("Wrong API key. Enter Correct API key.")
+        else:
+          st.write("Some Error occured in API.")
 
