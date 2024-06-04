@@ -2,41 +2,6 @@ import streamlit as st
 import pandas as pd
 import requests
 
-insurer_name_mapping = {
-  "Star Health & Allied Insurance Co. Ltd." : "Star Insurance",
-  "National Insurance Co. Ltd." : "",
-  "The New India Assurance Co Ltd." : "",
-  "The Oriental Insurance Co. Ltd." : "",
-  "United India Insurance Co. Ltd." : "",
-  "Acko General Insurance Ltd." : "",
-  "Bajaj Alianz General Insurance Co. Ltd." : "",
-  "Bharti AXA General Insurance Co. Ltd." : "",
-  "Cholamandalam MS General Insurance Co. Ltd." : "",
-  "Edelweiss General Insurance Co. Ltd." : "",
-  "Future Generali India Insurance Co. Ltd." : "",
-  "Go Digit General Insurance Ltd." : "",
-  "HDFC ERGO General Insurance Co. Ltd." : "HDFC",
-  "ICICI Lombard General Insurance Co. Ltd." : "",
-  "IFFCO Tokio General Insurance Co. Ltd." : "",
-  "Kotak Mahindra General Insurance Co. Ltd." : "",
-  "Liberty General Insurance Ltd." : "",
-  "Magma HDI General Insurance Co. Ltd." : "",
-  "Navi General Insurance Limited" : "",
-  "Raheja QBE General Insurance Co. Ltd." : "",
-  "Reliance General Insurance Co. Ltd." : "",
-  "Royal Sundaram General Insurance Co. Ltd." : "",
-  "SBI General Insurance Co. Ltd." : "",
-  "Shriram General Insurance Co. Ltd." : "",
-  "Tata AIG General Insurance Co. Ltd." : "",
-  "Universal Sompo General Insurance Co. Ltd." : "",
-  "Aditya Birla Health Insurance Co. Ltd." : "",
-  "Care Health Insurance Ltd." : "",
-  "HDFC ERGO Health Insurance Co. Ltd." : "",
-  "Manipal Cigna Health Insurance Co. Ltd." : "",
-  "Niva Bupa Health Insurance Co. Ltd." : "",
-  "Reliance Health Insurance Ltd." : "",
-}
-
 colors = {
   'header': '#cfe4f7',
   'odd_row': '#e7f1fa',
@@ -59,6 +24,7 @@ blue_shades = [
     {'selector': 'tr:hover',
      'props': [('background-color', '#c1c9ff')]},
 ]
+
 blue_shades = [
   {
     'selector': 'table',
@@ -101,12 +67,6 @@ blue_shades = [
     ]
   },
 ]
-st.set_page_config(
-  page_title="PIVOT Portability from Attributum",
-  # page_icon=":computer:",
-  layout="wide",  # sets page to wide mode as default. 
-  # initial_sidebar_state="expanded"
-)
 
 # Adds logo and title on screen.
 def add_logo():
@@ -121,9 +81,6 @@ def add_logo():
 
     with col2:
       st.title('PIVOT Portability from Attributum')
-  
-  # st.image("http://placekitten.com/200/200", width=30) #Adds image in the code.
-  # st.write("# PDF-Uploader")
 
 # Formats text.
 def change_name_format(name):
@@ -178,56 +135,50 @@ def show_table(response):
     st.table(styled_df)
 
 # Main logic.
-add_logo()
+def load():
+  add_logo() 
 
-# options = list(insurer_name_mapping.keys())
-# options.insert(0, None)
+  # Getting the API-Key.
+  port_api_key = st.text_input('API-Key')
+  option = None
 
-# Getting the API-Key.
-api_key = st.text_input('API-Key')
-option = None
+  if port_api_key:
+    # Getting the list of options.
+    url = "https://pivot-port-poldoc-health.attributum.com/api/company/all"
+    if "Api-Key " not in port_api_key:
+      port_api_key = f"Api-Key {port_api_key}"
+    headers = {"Authorization": port_api_key}
 
-if api_key:
-  # Getting the list of options.
-  url = "https://pivot-port-poldoc-health.attributum.com/api/company/all"
-  # headers = {"Authorization": st.secrets["auth_key"]} T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc
-  if "Api-Key " not in api_key:
-    api_key = f"Api-Key {api_key}"
-  headers = {"Authorization": api_key}
+    response = requests.get(url, headers=headers)
+    options = [company['name'] for company in response.json()]
+    options.insert(0, None)
 
-  response = requests.get(url, headers=headers)
-  options = [company['name'] for company in response.json()]
-  options.insert(0, None)
+    # Getting Policy type input.
+    option = st.selectbox(
+      'Insurer Name',
+      options
+    )
 
-  # Getting Policy type input.
-  option = st.selectbox(
-    'Insurer Name',
-    options
-  )
+  if option:
+    # Getting pdf input.
+    uploaded_pdf = st.file_uploader("Upload expiring policy pdf")
+    if uploaded_pdf is not None:
+      url = "https://pivot-port-poldoc-health.attributum.com/api/ml_process"
+      files = {
+        "input_file" : uploaded_pdf
+      } 
+      data = {
+        "insurance_company" : option,
+        "data_type" : "Generic"
+      }
+      if "Api-Key " not in port_api_key:
+        port_api_key = f"Api-Key {port_api_key}"
 
-if option:
-  # Getting pdf input.
-  uploaded_pdf = st.file_uploader("Upload expiring policy pdf")
-  # company = insurer_name_mapping[option]
-  if uploaded_pdf is not None:
-    url = "https://pivot-port-poldoc-health.attributum.com/api/ml_process"
-    files = {
-      "input_file" : uploaded_pdf
-    } 
-    data = {
-      "insurance_company" : option,
-      "data_type" : "Generic"
-    }
-    # headers = {"Authorization": st.secrets["auth_key"]} T33fvOdn.n2AO1NH9GmU2jL9066FEOQvIw9zSLJSc
-    if "Api-Key " not in api_key:
-      api_key = f"Api-Key {api_key}"
+      headers = {"Authorization": port_api_key}
 
-    headers = {"Authorization": api_key}
-
-    # Post API call.
-    if option != "":
-      response = requests.post(url, files=files, data=data, headers=headers)
-
-      if response:
-        show_table(response.json())
+      # Post API call.
+      if option != "":
+        response = requests.post(url, files=files, data=data, headers=headers)
+        if response:
+          show_table(response.json())
 
