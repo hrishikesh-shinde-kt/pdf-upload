@@ -69,18 +69,36 @@ blue_shades = [
 ]
 
 # Adds logo and title on screen.
-def add_logo():
+def add_logo1():
   # Create a container for the logo and title
   header = st.container()
 
   # Add a logo to the left column
   with header:
-    col1, col2 = st.columns([2,3])
+    col1, col2 = st.columns([2,2])
     with col1:
-      st.image('media/Attributum.png')
+      st.image('media/Attributum.png', use_column_width='auto')
 
     with col2:
-      st.title('PIVOT Portability from Attributum')
+      # st.title('PIVOT Portability from Attributum')
+      st.title('PIVOT Platform')
+      st.subheader('Capability Accelerator Modules Stack')
+      
+def add_logo():
+  # Create two columns
+  col1, col2 = st.columns([2, 2])
+
+  # 1st Column: Vertically centered image
+  with col1:
+      st.image('media/Attributum.png', use_column_width='auto')
+
+  # 2nd Column: Texts
+  with col2:
+      st.header("PIVOT Platform")
+      st.subheader("Capability Accelerator Modules Stack")
+      
+  st.divider()
+  st.write("### PIVOT Portability from Attributum")
 
 # Formats text.
 def change_name_format(name):
@@ -134,6 +152,14 @@ def show_table(response):
     styled_df = df.style.set_table_styles(blue_shades)
     st.table(styled_df)
 
+def custom_selectbox(label, options, disabled_options):
+    selected_option = st.selectbox(label, options)
+    if selected_option in disabled_options:
+        st.markdown(f"Selected option: **{selected_option}** (disabled)")
+    else:
+        st.markdown(f"Selected option: **{selected_option}**")
+
+
 # Main logic.
 def load():
   add_logo() 
@@ -151,8 +177,14 @@ def load():
 
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
-      options = [company['name'] for company in response.json()]
+      options = [company['name'].lower() for company in response.json()]
       options.insert(0, None)
+      
+      # Add more options.
+      additional_options = ["star insurance", "Icici", "hdfc ergo", "Niva bupa", "United india uba", "national", "Care health", "Cigna ttk", "Chola ms"]
+      for option in additional_options:
+        if option.lower() not in options:
+          options.append(option)
 
       # Getting Policy type input.
       option = st.selectbox(

@@ -126,15 +126,20 @@ def show_table(response):
 
 # Adds logo and title on screen.
 def add_logo():
-  header = st.container()
+  # Create two columns
+  col1, col2 = st.columns([2, 2])
 
-  with header:
-    col1, col2 = st.columns([2,3])
-    with col1:
-      st.image('media/Attributum.png')
+  # 1st Column: Vertically centered image
+  with col1:
+    st.image('media/Attributum.png', use_column_width='auto')
 
-    with col2:
-      st.title('PIVOT Underwriting Co-Pilot')
+  # 2nd Column: Texts
+  with col2:
+    st.header("PIVOT Platform")
+    st.subheader("Capability Accelerator Modules Stack")   
+      
+  st.divider()
+  st.write("### PIVOT Underwriting Co-Pilot")
 
 def load():
     add_logo()
